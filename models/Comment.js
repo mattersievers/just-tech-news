@@ -1,13 +1,9 @@
-const { Model, DataTypes } = require('sequelize');
+const { Model, DataTypes} = require('sequelize');
 const sequelize = require('../config/connection');
 
-class Post extends Model {
-    static upvote(body, models) {
-        return
-    }
-}
+class Comment extends Model {}
 
-Post.init(
+Comment.init(
     {
         id: {
             type: DataTypes.INTEGER,
@@ -15,21 +11,26 @@ Post.init(
             primaryKey: true,
             autoIncrement: true
         },
-        title: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        post_url: {
+        comment_text: {
             type: DataTypes.STRING,
             allowNull: false,
             validate: {
-                isUrl: true
+                len: [1]
             }
         },
-        user_id: {
+        user_id:{
             type: DataTypes.INTEGER,
+            allowNull: false,
             references: {
                 model: 'user',
+                key: 'id'
+            }
+        },
+        post_id:{
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            references: {
+                model: 'post',
                 key: 'id'
             }
         }
@@ -38,8 +39,8 @@ Post.init(
         sequelize,
         freezeTableName: true,
         underscored: true,
-        modelName: 'post'
+        modelName: 'comment'
     }
 );
 
-module.exports = Post;
+module.exports = Comment;
